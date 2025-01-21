@@ -11,6 +11,7 @@ func main() {
 	var targetAddressFileName string
 	flag.StringVar(&patternFileName, "i", "lowDimPatterns", "the pattern file")
 	flag.StringVar(&targetAddressFileName, "o", "targetAddresses", "the target address file")
+	flag.Parse()
 	start := time.Now()
 	generateAddress(patternFileName, targetAddressFileName)
 	endTime := time.Now()

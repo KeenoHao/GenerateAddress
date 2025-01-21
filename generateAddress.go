@@ -12,7 +12,7 @@ import (
 )
 
 var (
-	BitSet = make([]byte, 1<<28)
+	BitSet = make([]byte, 1<<30)
 )
 
 /**
@@ -29,11 +29,6 @@ func expandWildcard(input string) []string {
 
 func expandWildcardHelper(prefix, remaining string, results *[]string) {
 	if len(remaining) == 0 {
-		//resultHan := net.ParseIP(prefix).To16()
-		//if !filter.Test(hashIPv6(resultHan)) {
-		//	filter.Add(hashIPv6(resultHan))
-		//	*results = append(*results, prefix)
-		//}
 		if containsInBloomFilter(prefix) {
 			return
 		}
@@ -43,12 +38,6 @@ func expandWildcardHelper(prefix, remaining string, results *[]string) {
 
 	firstWildcard := strings.Index(remaining, "*")
 	if firstWildcard == -1 {
-		//resultHan := net.ParseIP(prefix + remaining).To16()
-		//if !filter.Test(hashIPv6(resultHan)) {
-		//	filter.Add(hashIPv6(resultHan))
-		//	*results = append(*results, prefix+remaining)
-		//}
-
 		// Keys of Bloom filters
 		if containsInBloomFilter(prefix + remaining) {
 			return
@@ -127,7 +116,7 @@ func generateAddress(patternFile, addressFile string) {
 		return
 	}
 
-	outputFile, err := os.Create(addressFile)
+	outputFile, err := os.OpenFile(addressFile, os.O_CREATE|os.O_WRONLY|os.O_TRUNC, 0644)
 	writer := bufio.NewWriter(outputFile)
 	if err != nil {
 		log.Fatalf("无法创建输出文件: %v", err)
